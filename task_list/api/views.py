@@ -1,3 +1,25 @@
-from django.shortcuts import render
+from rest_framework import viewsets, status
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
+from rest_framework.filters import SearchFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 
-# Create your views here.
+from task.models import Task
+from .serializers import (
+    PostSerializer,
+    GroupSerializer,
+    CommentSerializer,
+    FollowSerializer
+)
+
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = PostSerializer
+    # permission_classes = [IsOwnerOrReadOnly, ]
+    pagination_class = LimitOffsetPagination
+
+    # def perform_create(self, serializer):
+    #     serializer.save(author=self.request.user)
