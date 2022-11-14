@@ -6,20 +6,15 @@ from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
 
 from task.models import Task
-from .serializers import (
-    PostSerializer,
-    GroupSerializer,
-    CommentSerializer,
-    FollowSerializer
-)
+from .serializers import TaskSerializer
 
 
 
-class PostViewSet(viewsets.ModelViewSet):
+class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
-    serializer_class = PostSerializer
+    serializer_class = TaskSerializer
     # permission_classes = [IsOwnerOrReadOnly, ]
-    pagination_class = LimitOffsetPagination
+    # pagination_class = LimitOffsetPagination
 
     # def perform_create(self, serializer):
     #     serializer.save(author=self.request.user)
