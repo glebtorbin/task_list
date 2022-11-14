@@ -1,16 +1,11 @@
 from rest_framework import routers
 from django.urls import include, path
 
-from .views import TaskViewSet
+from .views import task_list, one_task, create_task
 
-
-router = routers.DefaultRouter()
-router.register(r'tasks', TaskViewSet)
-# router.register(r'groups', GroupViewSet)
-# router.register(r'follow', FollowViewSet, basename='follow')
-# router.register('posts/(?P<post_id>\\d+)/comments', CommentViewSet,
-#                 basename='comments')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('tasks/', task_list, name='task_list'),
+    path('tasks/<int:id>/', one_task, name='one_task'),
+    path('tasks/create/', create_task, name='create_task'),
 ]
