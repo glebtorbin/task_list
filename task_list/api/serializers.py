@@ -15,13 +15,15 @@ class TaskSerializer(serializers.ModelSerializer):
     def validate_done_date(self, data):
         now = date.today()
         if now > data:
-            raise serializers.ValidationError(f"Вы не можете указать дату меньше чем {now}")
+            raise serializers.ValidationError(
+                f"Вы не можете указать дату меньше чем {now}"
+            )
         return data
-    
+
     def validate_title(self, title):
-        obj = Task.objects.filter(title=title, done = 'False')
+        obj = Task.objects.filter(title=title, done='False')
         if obj:
             raise serializers.ValidationError(
-                f"Вы указали задание с существующим названием, закройте предыдущую задачу, либо переименуйте данную"
+                "Вы указали задание с существующим названием"
             )
         return title
