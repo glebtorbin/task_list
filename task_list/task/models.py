@@ -6,7 +6,6 @@ class Task(models.Model):
     text = models.TextField()
     done_date = models.DateField(auto_now_add=False)
     done = models.BooleanField(default=False)
-    
 
     def __str__(self):
         return self.text

@@ -1,14 +1,8 @@
-from django.http import Http404
 from rest_framework.decorators import api_view
-from rest_framework import status, viewsets
-from rest_framework.filters import SearchFilter
-from rest_framework.mixins import (CreateModelMixin, DestroyModelMixin,
-                                   ListModelMixin)
-from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 from rest_framework.response import Response
-from task.models import Task
 
+from task.models import Task
 from .serializers import TaskSerializer
 
 
@@ -20,7 +14,7 @@ def task_list(request):
     return Response({'tasks': serializer.data})
 
 @api_view(['GET'])
-def one_task(request, id):
+def task_detail(request, id):
     '''функция выводит задание по id'''
     try:
         task = Task.objects.get(id=id)
@@ -59,7 +53,19 @@ def done_task(request, id):
             return Response({'message': 'Вы уже сдали это задание'}, status=status.HTTP_200_OK)
         task.done = True
         task.save()
-        return Response({'message': 'задание сдано! Позравляем!'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Статус задания обновлен. Задание сдано! Позравляем!'}, status=status.HTTP_200_OK)
     except Task.DoesNotExist:
         return Response({'message': 'Задания с таким id не существует'}, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['GET'])
+def not_done_task(request, id):
+    '''функция помечает задание, как несданное, в случае ошибочной отметки'''
+    try:
+        task = Task.objects.get(id=id)
+        if task.done == False:
+            return Response({'message': 'Задание уже отмечено, как несданное'}, status=status.HTTP_200_OK)
+        task.done = False
+        task.save()
+        return Response({'message': 'cтатус задания обновлен, отмечено, как несданное'}, status=status.HTTP_200_OK)
+    except Task.DoesNotExist:
+        return Response({'message': 'Задания с таким id не существует'}, status=status.HTTP_404_NOT_FOUND)
