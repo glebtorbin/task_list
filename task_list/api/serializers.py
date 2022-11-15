@@ -9,7 +9,7 @@ class TaskSerializer(serializers.ModelSerializer):
     done_date = serializers.DateField()
 
     class Meta:
-        fields = '__all__'
+        fields = ('title', 'text', 'done_date', 'done')
         model = Task
 
     def validate_done_date(self, data):
